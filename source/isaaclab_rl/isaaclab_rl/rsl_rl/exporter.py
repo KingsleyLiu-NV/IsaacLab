@@ -8,7 +8,9 @@ import os
 import torch
 
 
-def export_policy_as_jit(actor_critic: object, normalizer: object | None, path: str, filename="policy.pt"):
+def export_policy_as_jit(
+    actor_critic: object, normalizer: object | None, path: str, filename="policy.pt"
+):
     """Export policy into a Torch JIT file.
 
     Args:
@@ -22,7 +24,11 @@ def export_policy_as_jit(actor_critic: object, normalizer: object | None, path: 
 
 
 def export_policy_as_onnx(
-    actor_critic: object, path: str, normalizer: object | None = None, filename="policy.onnx", verbose=False
+    actor_critic: object,
+    path: str,
+    normalizer: object | None = None,
+    filename="policy.onnx",
+    verbose=False,
 ):
     """Export policy into a Torch ONNX file.
 
@@ -54,8 +60,12 @@ class _TorchPolicyExporter(torch.nn.Module):
         if self.is_recurrent:
             self.rnn = copy.deepcopy(actor_critic.memory_a.rnn)
             self.rnn.cpu()
-            self.register_buffer("hidden_state", torch.zeros(self.rnn.num_layers, 1, self.rnn.hidden_size))
-            self.register_buffer("cell_state", torch.zeros(self.rnn.num_layers, 1, self.rnn.hidden_size))
+            self.register_buffer(
+                "hidden_state", torch.zeros(self.rnn.num_layers, 1, self.rnn.hidden_size)
+            )
+            self.register_buffer(
+                "cell_state", torch.zeros(self.rnn.num_layers, 1, self.rnn.hidden_size)
+            )
             self.forward = self.forward_lstm
             self.reset = self.reset_memory
         # copy normalizer if exists
@@ -137,7 +147,10 @@ class _OnnxPolicyExporter(torch.nn.Module):
                 dynamic_axes={},
             )
         else:
-            obs = torch.zeros(1, self.actor[0].in_features)
+            input_size = getattr(self.actor, "input_dim", None)
+            if input_size is None:
+                input_size = self.actor[0].in_features
+            obs = torch.zeros(1, input_size)
             torch.onnx.export(
                 self,
                 obs,
