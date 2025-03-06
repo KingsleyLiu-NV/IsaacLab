@@ -146,6 +146,16 @@ def main(
 
     # create runner from rsl-rl
     if agent_cfg.policy.class_name == "ActorCriticConv2d":
+        if (
+            env_cfg.scene.tiled_camera.height != agent_cfg.policy.image_input_shape[1]
+            or env_cfg.scene.tiled_camera.width != agent_cfg.policy.image_input_shape[2]
+        ):
+            raise ValueError(
+                f"Mismatch in camera dimensions: "
+                f"tiled_camera.height={env_cfg.scene.tiled_camera.height}, "
+                f"tiled_camera.width={env_cfg.scene.tiled_camera.width} "
+                f"must match image_input_shape={agent_cfg.policy.image_input_shape[1]}x{agent_cfg.policy.image_input_shape[2]}"
+            )
         runner = OnPolicyRunnerConv2d(
             env, agent_cfg.to_dict(), log_dir=log_dir, device=agent_cfg.device
         )

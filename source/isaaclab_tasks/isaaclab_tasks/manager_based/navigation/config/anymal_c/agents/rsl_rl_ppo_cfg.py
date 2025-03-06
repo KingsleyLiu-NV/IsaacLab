@@ -59,7 +59,7 @@ class NavigationEnvPPOConv2dRunnerCfg(RslRlOnPolicyRunnerCfg):
             {"out_channels": 8, "kernel_size": 3, "stride": 2},
             {"out_channels": 16, "kernel_size": 3, "stride": 2},
         ],
-        conv_linear_output_size=128,
+        conv_linear_output_size=16,
         image_input_shape=(3, 64, 64),
     )
     algorithm = RslRlPpoAlgorithmCfg(

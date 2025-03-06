@@ -43,7 +43,7 @@ class RslRlPpoActorCriticConv2dCfg(RslRlPpoActorCriticCfg):
     ]
     """List of convolutional layer parameters for the convolutional network."""
 
-    conv_linear_output_size: int = 128
+    conv_linear_output_size: int = 16
     """Output size of the linear layer after the convolutional features are flattened."""
 
     image_input_shape: Tuple[int, int, int] = (3, 64, 64)

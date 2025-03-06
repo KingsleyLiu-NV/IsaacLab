@@ -172,8 +172,8 @@ class NavigationObstacleEnvCfg(ManagerBasedRLEnvCfg):
         self.scene.tiled_camera = TiledCameraCfg(
             prim_path="{ENV_REGEX_NS}/Robot/base/front_cam",
             update_period=0.1,
-            height=80,
-            width=80,
+            height=64,
+            width=64,
             data_types=["rgb", "distance_to_image_plane"],
             spawn=sim_utils.PinholeCameraCfg(
                 focal_length=24.0,
@@ -216,8 +216,8 @@ class NavigationObstacleEnvCfg_PLAY(NavigationObstacleEnvCfg):
         self.scene.tiled_camera = TiledCameraCfg(
             prim_path="{ENV_REGEX_NS}/Robot/base/front_cam",
             update_period=0.1,
-            height=80,
-            width=80,
+            height=64,
+            width=64,
             data_types=["rgb", "distance_to_image_plane"],
             spawn=sim_utils.PinholeCameraCfg(
                 focal_length=24.0,
