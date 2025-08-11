@@ -72,7 +72,11 @@ Guidelines for modifications:
 * HoJin Jeon
 * Hongwei Xiong
 * Hongyu Li
+<<<<<<< HEAD
 * Huihua Zhao
+=======
+* Hui Kang
+>>>>>>> temporary save changes
 * Iretiayo Akinola
 * Jack Zeng
 * Jan Kerner
@@ -85,6 +89,7 @@ Guidelines for modifications:
 * Jinqi Wei
 * Johnson Sun
 * Kaixi Bao
+* Kingsley Liu
 * Kris Wilson
 * Kourosh Darvish
 * Kousheek Chakraborty
