@@ -50,7 +50,9 @@ class NavigationEnvPPOConv2dRunnerCfg(RslRlOnPolicyRunnerCfg):
     save_interval = 50
     experiment_name = "anymal_c_navigation"
     empirical_normalization = False
+    obs_groups = {"policy": ["policy", "sensor"], "critic": ["policy", "sensor"]}
     policy = RslRlPpoActorCriticConv2dCfg(
+        class_name="ActorCriticConv2d",
         init_noise_std=0.5,
         actor_hidden_dims=[128, 128],
         critic_hidden_dims=[128, 128],
