@@ -77,12 +77,7 @@ import os
 import torch
 from datetime import datetime
 
-<<<<<<< HEAD
 import omni
-from rsl_rl.runners import DistillationRunner, OnPolicyRunner
-=======
-from rsl_rl.runners import OnPolicyRunner, OnPolicyRunnerConv2d
->>>>>>> temporary save changes
 
 from isaaclab.envs import (
     DirectMARLEnv,
@@ -93,6 +88,7 @@ from isaaclab.envs import (
 )
 from isaaclab.utils.dict import print_dict
 from isaaclab.utils.io import dump_pickle, dump_yaml
+from rsl_rl.runners import DistillationRunner, OnPolicyRunner
 
 from isaaclab_rl.rsl_rl import RslRlBaseRunnerCfg, RslRlVecEnvWrapper
 
@@ -183,19 +179,12 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
     env = RslRlVecEnvWrapper(env, clip_actions=agent_cfg.clip_actions)
 
     # create runner from rsl-rl
-<<<<<<< HEAD
     if agent_cfg.class_name == "OnPolicyRunner":
         runner = OnPolicyRunner(env, agent_cfg.to_dict(), log_dir=log_dir, device=agent_cfg.device)
     elif agent_cfg.class_name == "DistillationRunner":
         runner = DistillationRunner(env, agent_cfg.to_dict(), log_dir=log_dir, device=agent_cfg.device)
     else:
         raise ValueError(f"Unsupported runner class: {agent_cfg.class_name}")
-=======
-    if agent_cfg.policy.class_name == "ActorCriticConv2d":
-        runner = OnPolicyRunnerConv2d(env, agent_cfg.to_dict(), log_dir=log_dir, device=agent_cfg.device)
-    else:
-        runner = OnPolicyRunner(env, agent_cfg.to_dict(), log_dir=log_dir, device=agent_cfg.device)
->>>>>>> temporary save changes
     # write git state to logs
     runner.add_git_repo_to_log(__file__)
     # load the checkpoint

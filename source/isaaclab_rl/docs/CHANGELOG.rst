@@ -1,7 +1,6 @@
 Changelog
 ---------
 
-<<<<<<< HEAD
 0.4.1 (2025-09-09)
 ~~~~~~~~~~~~~~~~~~
 
@@ -16,15 +15,10 @@ Fixed
 
 0.4.0 (2025-09-09)
 ~~~~~~~~~~~~~~~~~~
-=======
-0.1.9 (2025-08-11)
-~~~~~~~~~~~~~~~~~~~~
->>>>>>> temporary save changes
 
 Added
 ^^^^^
 
-<<<<<<< HEAD
 * Introduced PBT to rl-games.
 
 
@@ -49,12 +43,6 @@ Fixed
 
 
 0.2.3 (2025-06-29)
-=======
-* Added configuration for RSL RL actor-critic networks with convolutional layers.
-
-
-0.1.8 (2025-06-29)
->>>>>>> temporary save changes
 ~~~~~~~~~~~~~~~~~~
 
 Added

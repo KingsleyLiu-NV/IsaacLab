@@ -1,17 +1,12 @@
 Changelog
 ---------
 
-<<<<<<< HEAD
 0.11.0 (2025-09-07)
-=======
-0.10.39 (2025-08-11)
->>>>>>> temporary save changes
 ~~~~~~~~~~~~~~~~~~~~
 
 Added
 ^^^^^
 
-<<<<<<< HEAD
 * Added dextrous lifting and dextrous reorientation manipulation rl environments.
 
 
@@ -84,15 +79,6 @@ Added
 
 
 0.10.45 (2025-07-16)
-=======
-* Added ``Isaac-Navigation-Flat-Obstacle-Anymal-C-v0`` environment as a manager-based RL env that implements the Anymal-C navigation task
-  with obstacle and camera sensor in the scene.
-* Added the pose2d command that generates the target position based on the position of the obstacle object.
-* Added the reset event that samples a position in a sector of a ring area defined by the radius and angle ranges.
-
-
-0.10.38 (2025-07-31)
->>>>>>> temporary save changes
 ~~~~~~~~~~~~~~~~~~~~
 
 Added

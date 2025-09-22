@@ -72,11 +72,8 @@ Guidelines for modifications:
 * HoJin Jeon
 * Hongwei Xiong
 * Hongyu Li
-<<<<<<< HEAD
-* Huihua Zhao
-=======
 * Hui Kang
->>>>>>> temporary save changes
+* Huihua Zhao
 * Iretiayo Akinola
 * Jack Zeng
 * Jan Kerner

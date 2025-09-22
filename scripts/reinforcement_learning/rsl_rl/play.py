@@ -58,15 +58,6 @@ import os
 import time
 import torch
 
-<<<<<<< HEAD
-from rsl_rl.runners import DistillationRunner, OnPolicyRunner
-=======
-from on_policy_runner_conv2d import OnPolicyRunnerConv2d
-
-# from rsl_rl.runners import OnPolicyRunner, OnPolicyRunnerConv2d
-from rsl_rl.runners import OnPolicyRunner
->>>>>>> temporary save changes
-
 from isaaclab.envs import (
     DirectMARLEnv,
     DirectMARLEnvCfg,
@@ -77,6 +68,7 @@ from isaaclab.envs import (
 from isaaclab.utils.assets import retrieve_file_path
 from isaaclab.utils.dict import print_dict
 from isaaclab.utils.pretrained_checkpoint import get_published_pretrained_checkpoint
+from rsl_rl.runners import DistillationRunner, OnPolicyRunner
 
 from isaaclab_rl.rsl_rl import RslRlBaseRunnerCfg, RslRlVecEnvWrapper, export_policy_as_jit, export_policy_as_onnx
 
@@ -146,7 +138,6 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
 
     print(f"[INFO]: Loading model checkpoint from: {resume_path}")
     # load previously trained model
-<<<<<<< HEAD
     if agent_cfg.class_name == "OnPolicyRunner":
         runner = OnPolicyRunner(env, agent_cfg.to_dict(), log_dir=None, device=agent_cfg.device)
     elif agent_cfg.class_name == "DistillationRunner":
@@ -154,13 +145,6 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
     else:
         raise ValueError(f"Unsupported runner class: {agent_cfg.class_name}")
     runner.load(resume_path)
-=======
-    if agent_cfg.policy.class_name == "ActorCriticConv2d":
-        ppo_runner = OnPolicyRunnerConv2d(env, agent_cfg.to_dict(), log_dir=None, device=agent_cfg.device)
-    else:
-        ppo_runner = OnPolicyRunner(env, agent_cfg.to_dict(), log_dir=None, device=agent_cfg.device)
-    ppo_runner.load(resume_path)
->>>>>>> temporary save changes
 
     # obtain the trained policy for inference
     policy = runner.get_inference_policy(device=env.unwrapped.device)
@@ -190,14 +174,7 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
     dt = env.unwrapped.step_dt
 
     # reset environment
-<<<<<<< HEAD
     obs = env.get_observations()
-=======
-    obs, extras = env.get_observations()
-    if "sensor" in extras["observations"]:
-        image_obs = extras["observations"]["sensor"].permute(0, 3, 1, 2).flatten(start_dim=1)
-        obs = torch.cat([obs, image_obs], dim=1)
->>>>>>> temporary save changes
     timestep = 0
     # simulate environment
     while simulation_app.is_running():
@@ -208,9 +185,6 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
             actions = policy(obs)
             # env stepping
             obs, _, _, infos = env.step(actions)
-            if "sensor" in infos["observations"]:
-                image_obs = infos["observations"]["sensor"].permute(0, 3, 1, 2).flatten(start_dim=1)
-                obs = torch.cat([obs, image_obs], dim=1)
         if args_cli.video:
             timestep += 1
             # Exit the play loop after recording one video
