@@ -50,6 +50,7 @@ class _TorchPolicyExporter(torch.nn.Module):
     def __init__(self, policy, normalizer=None):
         super().__init__()
         self.is_recurrent = policy.is_recurrent
+        self.is_conv2d = policy.is_conv2d
         # copy policy parameters
         if hasattr(policy, "actor"):
             self.actor = copy.deepcopy(policy.actor)
@@ -75,6 +76,11 @@ class _TorchPolicyExporter(torch.nn.Module):
                 self.reset = self.reset_memory
             else:
                 raise NotImplementedError(f"Unsupported RNN type: {self.rnn_type}")
+        # set up conv2d network
+        elif self.is_conv2d:
+            self.num_actor_obs = policy.num_actor_obs
+            self.image_input_shape = policy.image_input_shape
+            self.forward = self.forward_conv2d
         # copy normalizer if exists
         if normalizer:
             self.normalizer = copy.deepcopy(normalizer)
@@ -95,6 +101,11 @@ class _TorchPolicyExporter(torch.nn.Module):
         self.hidden_state[:] = h
         x = x.squeeze(0)
         return self.actor(x)
+
+    def forward_conv2d(self, proprio, image):
+        """Forward pass for Conv2d networks with separate inputs."""
+        proprio = self.normalizer(proprio)
+        return self.actor(proprio, image)
 
     def forward(self, x):
         return self.actor(self.normalizer(x))
@@ -123,6 +134,7 @@ class _OnnxPolicyExporter(torch.nn.Module):
         super().__init__()
         self.verbose = verbose
         self.is_recurrent = policy.is_recurrent
+        self.is_conv2d = policy.is_conv2d
         # copy policy parameters
         if hasattr(policy, "actor"):
             self.actor = copy.deepcopy(policy.actor)
@@ -144,6 +156,11 @@ class _OnnxPolicyExporter(torch.nn.Module):
                 self.forward = self.forward_gru
             else:
                 raise NotImplementedError(f"Unsupported RNN type: {self.rnn_type}")
+        # set up conv2d network
+        elif self.is_conv2d:
+            self.num_actor_obs = policy.num_actor_obs
+            self.image_input_shape = policy.image_input_shape
+            self.forward = self.forward_conv2d
         # copy normalizer if exists
         if normalizer:
             self.normalizer = copy.deepcopy(normalizer)
@@ -161,6 +178,11 @@ class _OnnxPolicyExporter(torch.nn.Module):
         x, h = self.rnn(x_in.unsqueeze(0), h_in)
         x = x.squeeze(0)
         return self.actor(x), h
+
+    def forward_conv2d(self, proprio, image):
+        """Forward pass for Conv2d networks with separate inputs."""
+        proprio = self.normalizer(proprio)
+        return self.actor(proprio, image)
 
     def forward(self, x):
         return self.actor(self.normalizer(x))
@@ -199,6 +221,21 @@ class _OnnxPolicyExporter(torch.nn.Module):
                 )
             else:
                 raise NotImplementedError(f"Unsupported RNN type: {self.rnn_type}")
+        elif self.is_conv2d:
+            proprio_obs = torch.zeros(1, self.num_actor_obs)
+            image_obs = torch.zeros(1, *self.image_input_shape)
+
+            torch.onnx.export(
+                self,
+                (proprio_obs, image_obs),
+                os.path.join(path, filename),
+                export_params=True,
+                opset_version=11,
+                verbose=self.verbose,
+                input_names=["proprio", "image"],
+                output_names=["actions"],
+                dynamic_axes={},
+            )
         else:
             obs = torch.zeros(1, self.actor[0].in_features)
             torch.onnx.export(
