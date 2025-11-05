@@ -1843,6 +1843,10 @@ class Articulation(AssetBase):
         """
         # process actions per group
         for actuator in self.actuators.values():
+            # provide global joint data for neural network actuators
+            if hasattr(actuator, "set_global_joint_data"):
+                actuator.set_global_joint_data(self._data.joint_pos, self._data.joint_vel, self._data.joint_pos_target)
+
             # prepare input for actuator model based on cached data
             # TODO : A tensor dict would be nice to do the indexing of all tensors together
             control_action = ArticulationActions(

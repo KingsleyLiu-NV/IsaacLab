@@ -9,7 +9,7 @@ from typing import Literal
 
 from isaaclab.utils import configclass
 
-from . import actuator_net, actuator_pd
+from . import actuator_delta_torque, actuator_net, actuator_pd
 from .actuator_base import ActuatorBase
 
 
@@ -288,4 +288,28 @@ class RemotizedPDActuatorCfg(DelayedPDActuatorCfg):
 
     This tensor describes the relationship between the joint angle (rad), the transmission ratio (in/out),
     and the output torque (N*m). The table is used to interpolate the output torque based on the joint angle.
+    """
+
+
+@configclass
+class DeltaTorqueActuatorCfg(IdealPDActuatorCfg):
+    """Configuration for delta torque actuator with neural network enhancement.
+
+    This actuator combines PD control with neural network predictions to generate
+    delta torques for specified joints.
+    """
+
+    class_type: type = actuator_delta_torque.DeltaTorqueActuator
+
+    network_file: str = MISSING
+    """Path to the neural network model file (.pt format)."""
+
+    action_scale: float = 0.1
+    """Scaling factor applied to neural network output."""
+
+    valid_joint_names: list[str] | None = None
+    """List of joint names that receive delta torques from the neural network.
+
+    If None, delta torques are applied to all joints in the actuator group.
+    If specified, only joints in this list will receive neural network corrections.
     """
